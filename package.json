@@ -1,0 +1,36 @@
+{
+  "name": "firelock",
+  "version": "1.0.0",
+  "description": "A Firecracker-microVM execution shell: confine an untrusted guest to a single, guest-initiated vsock egress and relay its connection (SCM_RIGHTS) to a pluggable handler. The confinement is the product; the handler is yours.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./handlers/http-reverse-proxy": "./src/handlers/http-reverse-proxy.ts"
+  },
+  "files": [
+    "src",
+    "docs",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "firecracker",
+    "microvm",
+    "sandbox",
+    "confinement",
+    "vsock",
+    "scm_rights",
+    "reverse-proxy"
+  ],
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
+  }
+}

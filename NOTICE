@@ -1,0 +1,14 @@
+Firelock
+Copyright 2026 Formelo Inc.
+
+This product includes software developed at Formelo Inc.
+
+Firelock is the Firecracker-microVM execution shell extracted from the
+Kilimanjaro platform. It confines an untrusted guest to a single
+guest-initiated vsock egress and relays that connection to a pluggable
+handler. The confinement guarantee is structural; the handler is the
+integrator's to supply (a working HTTP reverse-proxy handler ships as the
+default so the shell is usable on its own).
+
+Firecracker is a trademark of Amazon.com, Inc. or its affiliates. Firelock
+is an independent project and is not endorsed by or affiliated with Amazon.

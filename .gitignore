@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+# Rust native artifact build outputs (the pulse-fd-handoff .so lands here once the substrate carve lands)
+target/
+*.so
