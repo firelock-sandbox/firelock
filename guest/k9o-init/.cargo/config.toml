@@ -1,0 +1,8 @@
+# The Firecracker guest has no dynamic loader, so k9o-init must be a fully
+# static binary. musl links static by default; +crt-static makes it explicit.
+# Build the deployable artifact with:
+#   cargo build --release --target x86_64-unknown-linux-musl
+# (host-side `cargo test` / `cargo check` pass --target explicitly, so no default
+# target is set here — that would break testing on a non-Linux dev host).
+[target.x86_64-unknown-linux-musl]
+rustflags = ["-C", "target-feature=+crt-static"]

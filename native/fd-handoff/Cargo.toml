@@ -1,0 +1,28 @@
+[package]
+name = "firelock-fd-handoff"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/firelock-sandbox/firelock"
+publish = false
+description = "SCM_RIGHTS guest-connection-fd handoff (dispatcher -> executor) with sole-owner discipline."
+# The `SCM_RIGHTS` fd-handoff from the gate dispatcher to the executor over a
+# host-internal AF_UNIX control socket.
+#
+# On `allow`, the dispatcher passes the guest connection fd `C` to the executor
+# together with the decision receipt, then CLOSES its own copy of `C` — leaving
+# the executor as the sole fd owner. That single-owner property is what makes
+# single-use structural: the guest never holds the receipt (it travels
+# host-internal only), and `C` cannot be re-presented.
+#
+# Built as an rlib (unit-tested with real fds on the development host — SCM_RIGHTS is BSD
+# sockets, works on macOS + Linux) AND a cdylib, so the Bun/TS gate dispatcher can
+# call it via `bun:ffi`. The Rust core gets the fiddly cmsg construction right in one
+# place; the executor's recv side can link the same rlib.
+
+[lib]
+name = "firelock_fd_handoff"
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+libc = "0.2"

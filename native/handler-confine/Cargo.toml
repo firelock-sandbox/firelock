@@ -1,0 +1,26 @@
+[package]
+name = "firelock-handler-confine"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/firelock-sandbox/firelock"
+publish = false
+description = "Executor-internal handler confinement: netns + seccomp-bpf (complete-class, deny-by-default KILL_PROCESS) + cgroup v2."
+# Confines the credential-less HANDLER — a host-side process the executor core spawns,
+# distinct from and additional to the Firecracker microVM (which confines the GUEST).
+# Two boundaries, two trust domains: the core holds the credential store and brokers
+# egress; the handler runs the per-tool handler credential-less and calls back to the core
+# over the fixed-verb oracle channel. The handler receives `rawFrame` as a plain read over
+# the oracle fd; no fd crosses to the handler.
+#
+# Linux-only (seccomp-bpf / CLONE_NEWNET / cgroup v2 are Linux syscalls) — a compile_error!
+# guards non-Linux so a macOS development build fails loud, never silently no-ops.
+# Built as rlib+cdylib (mirrors firelock-fd-handoff): the executor runtime calls the
+# cdylib via bun:ffi.
+
+[lib]
+name = "firelock_handler_confine"
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+libc = "0.2"

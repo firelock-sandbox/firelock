@@ -1,0 +1,31 @@
+[package]
+name = "k9o-init"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/firelock-sandbox/firelock"
+publish = false
+description = "k9o Firecracker guest agent — PID 1. Serves host-initiated HTTP-over-vsock invocations (:8000 → the extension's loopback server), bridges the guest→host gate (/run/k9o/gate.sock → vsock cid=2:9000, the SDK's UDS fallback path), performs minimal init, and supervises the extension entrypoint. Injected into every converted rootfs by the image converter."
+
+[[bin]]
+name = "k9o-init"
+path = "src/main.rs"
+
+[lib]
+name = "k9o_init"
+path = "src/lib.rs"
+
+[dependencies]
+# libc is the only syscall dependency (AF_VSOCK, mount, fork/exec, waitpid).
+# Linux-only usage is cfg-gated so the pure logic still builds + tests on any host.
+libc = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+# Small static guest binary. NOT panic=abort: a panic in a per-connection worker
+# thread must kill only that thread, never PID 1 (unwind isolates it).
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
